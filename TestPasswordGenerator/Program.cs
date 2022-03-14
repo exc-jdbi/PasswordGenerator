@@ -10,16 +10,17 @@ using static exc.jdbi.PasswordGenerators.PasswordGenerator;
 public class Program
 {
   private static readonly Random Rand = new();
+  private static Encoding OutputEncoding = Encoding.UTF8; 
   public static void Main()
-  {
-    //https://stackoverflow.com/a/5750227
-    var encode = Console.OutputEncoding;
-    Console.OutputEncoding = Encoding.UTF8;
+  { 
+
+    //Console UniCode-Output
+    SetConsoleOutputEncoding(true);
+
     TestCreatePassword();
     TestFullRngCreatePassword();
-    TestPasswordStrength();
 
-    Console.InputEncoding = encode;
+    SetConsoleOutputEncoding(false);
 
     Console.WriteLine();
     Console.WriteLine();
@@ -51,6 +52,7 @@ public class Program
     Console.WriteLine();
     Console.WriteLine();
   }
+
   private static void TestFullRngCreatePassword()
   {
     Console.WriteLine($"{nameof(TestFullRngCreatePassword)} ");
@@ -73,36 +75,10 @@ public class Program
     Console.WriteLine();
     Console.WriteLine();
   }
-
-  private static void TestPasswordStrength()
-  {
-    Console.WriteLine($"{nameof(TestPasswordStrength)}");
-    Console.WriteLine($"********************");
-    Console.WriteLine();
-
-    var count = 10;
-    for (int i = 0; i < count; i++)
-    {
-      //var size = Rand.Next(10, 32);
-      //PasswordInfo pwinfo = DefaultPasswordInfo(size);
-
-      PasswordInfo pwinfo = RngPasswordInfo();
-      PrintOut(pwinfo);
-      var pw = PasswordString(pwinfo);
-      var originalpw = DecodePassword(pw, pwinfo.StringConvertInfo);
-      var pwstrength = PasswordStrengthChecker(originalpw);
-      Console.WriteLine($"Password original: {originalpw }");
-      Console.WriteLine($"Password encoded: {pw}");
-      Console.WriteLine($"Strength: {pwstrength}");
-      Console.WriteLine();
-    }
-    Console.WriteLine();
-    Console.WriteLine();
-  }
-
+   
   private static PasswordInfo DefaultPasswordInfo(int size)
   {
-    PasswordInfo pwinfo = default;
+    PasswordInfo pwinfo = new();
     pwinfo.Length = size;
     pwinfo.NumericLetters = true;
     pwinfo.UppercaseCharacters = true;
@@ -114,7 +90,7 @@ public class Program
 
   private static PasswordInfo V1PasswordInfo(int size)
   {
-    PasswordInfo pwinfo = default;
+    PasswordInfo pwinfo = new();
     pwinfo.Length = size;
     pwinfo.NumericLetters = true;
     pwinfo.UppercaseCharacters = true;
@@ -126,7 +102,7 @@ public class Program
 
   private static PasswordInfo V2PasswordInfo(int size)
   {
-    PasswordInfo pwinfo = default;
+    PasswordInfo pwinfo = new();
     pwinfo.Length = size;
     pwinfo.NumericLetters = true;
     pwinfo.UppercaseCharacters = true;
@@ -139,7 +115,8 @@ public class Program
   private static PasswordInfo RngPasswordInfo()
   {
     var cnt = 0;
-    PasswordInfo pwinfo = default;
+    PasswordInfo pwinfo = new();
+    var enums = (StringConvertInfo[])Enum.GetValues(typeof(StringConvertInfo));
     while (cnt <= 0)
     {
       cnt = 0;
@@ -154,7 +131,6 @@ public class Program
       if (pwinfo.SpecialCharacters) cnt++;
       pwinfo.InternationalSymbols = Rand.Next(0, 2) == 1;
       if (pwinfo.InternationalSymbols) cnt++;
-      var enums = (StringConvertInfo[])Enum.GetValues(typeof(StringConvertInfo));
       pwinfo.StringConvertInfo = enums[Rand.Next(enums.Length)];
     }
     return pwinfo;
@@ -172,15 +148,17 @@ public class Program
     Console.WriteLine($"StringConvertInfo = {pwinfo.StringConvertInfo}");
   }
 
-  private static string ByteArrayToHexStr(byte[] ba)
-  => Convert.ToHexString(ba);
-
-  private static byte[] HexStrToByteArray(string hex)
+  private static void SetConsoleOutputEncoding(bool _set)
   {
-    int NumberChars = hex.Length;
-    byte[] bytes = new byte[NumberChars / 2];
-    for (int i = 0; i < NumberChars; i += 2)
-      bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-    return bytes;
+    //Ist nur eine provisorische Lösung.
+    if (_set)
+    {
+      //https://stackoverflow.com/a/5750227
+      OutputEncoding = Console.OutputEncoding;
+      Console.OutputEncoding = Encoding.UTF8;
+      return;
+    }
+    Console.OutputEncoding = OutputEncoding;
   }
+
 }
