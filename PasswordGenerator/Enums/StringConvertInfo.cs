@@ -7,5 +7,6 @@ public enum StringConvertInfo
   Hex,
   Base32,
   Base62,
-  Base64
+  Base64,
+  Base64Url
 }
