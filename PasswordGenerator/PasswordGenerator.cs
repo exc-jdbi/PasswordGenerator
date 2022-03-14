@@ -9,15 +9,20 @@ using CRand = Randoms.CryptoRandom;
 
 public partial class PasswordGenerator
 {
-
+  /// <summary>
+  /// Minimum size of a password.
+  /// </summary>
   public const int PASSWORD_MIN_SIZE = 10;
+  /// <summary>
+  /// Maximum size of a password.
+  /// </summary>
   public const int PASSWORD_MAX_SIZE = 1024;
 
   /// <summary>
-  /// 
+  /// Creates a random bytes password. 0 - 255
   /// </summary>
-  /// <param name="size"></param>
-  /// <returns></returns>
+  /// <param name="size">Size of Passwort.</param>
+  /// <returns>A new password as array of byte.</returns>
   public static byte[] PasswordBytes(int size)
   {
     var result = new byte[size];
@@ -26,15 +31,16 @@ public partial class PasswordGenerator
   }
 
   /// <summary>
-  /// 
+  /// Creates a random password based on the password information.
   /// </summary>
   /// <param name="pwinfo">Password information</param>
-  /// <returns></returns>
+  /// <returns>A new Password as string</returns>
   public static string PasswordString(PasswordInfo pwinfo)
   {
     AssertPasswordInfo(pwinfo);
     (var numeric, var upper, var lower) = ToRngAlphaString();
-    var special = ToRngSpecialCharacters();
+    var special = PasswordCheckers.ToRngSpecialCharacters();
+    //var speclen = special.Length;
     var sb = new StringBuilder(pwinfo.Length);
 
     int counter;
@@ -72,9 +78,9 @@ public partial class PasswordGenerator
         counter++;
       }
       if (counter == 0)
-        //Das würde heissen, dass in pwinfo alles
-        //auf false gestellt wäre.
-        throw new ArgumentException(nameof(pwinfo));
+        //Das würde heissen, dass in pwinfo alles auf false gestellt wäre.
+        throw new ArgumentException(
+          $"All Arguments in {nameof(pwinfo)} are false", nameof(pwinfo));
       i += counter - 1;
     }
 
@@ -86,13 +92,8 @@ public partial class PasswordGenerator
   }
 
   /// <summary>
-  /// Checks the password strength
+  /// Checks the password strength Only for Alhpanumeric Values.
   /// </summary>
-  /// <remarks>
-  /// Samples are here: <para/>
-  /// <seealso href="link">http://www.blackwasp.co.uk/</seealso><para/>
-  /// <seealso href="link">https://stackoverflow.com/questions/12899876/checking-strings-for-a-strong-enough-password</seealso> 
-  /// </remarks>
   /// <param name="password">password as string</param>
   /// <returns>Return a PasswordStrength-Datatype.</returns>
   public static PasswordStrength PasswordStrengthChecker(string password)
@@ -100,56 +101,105 @@ public partial class PasswordGenerator
   => PasswordCheckers.ToPasswordStrength(password);
 
   /// <summary>
-  /// Encode a StringPassword.
+  /// Checks the password strength.
+  /// </summary>
+  /// <param name="password">password as array of byte</param>
+  /// <returns>Return a PasswordStrength-Datatype.</returns>
+  public static PasswordStrength PasswordStrengthChecker(byte[] password)
+  //You can use the SecureString too, if it helps you.
+  => PasswordCheckers.ToPasswordStrength(password);
+
+  /// <summary>
+  /// Converts a string to its equivalent string representation that is encoded.
   /// </summary>
   /// <param name="password">Your password as string</param>
   /// <param name="pwinfo">Password information</param>
-  /// <returns></returns>
+  /// <returns>The string representation, in encoding, of the contents of inArray.</returns>
   public static string EncodePassword(string password, PasswordInfo pwinfo)
-  {
+  => EncodePassword(password, pwinfo.StringConvertInfo);
 
-    var sci = pwinfo.StringConvertInfo;
+  /// <summary>
+  /// Converts a string to its equivalent string representation that is encoded
+  /// </summary>
+  /// <param name="password">Your password as string</param>
+  /// <param name="convertinfo">Convert information</param>
+  /// <returns>The string representation, in encoding, of the contents of inArray.</returns>
+  /// <exception cref="NotImplementedException"></exception>
+  public static string EncodePassword(string password, StringConvertInfo convertinfo)
+  {
+    if (StringConvertInfo.None == convertinfo)
+      return password;
+
     var bytes = Encoding.UTF8.GetBytes(password);
-    return sci switch
+    return EncodePassword(bytes, convertinfo);
+  }
+
+  /// <summary>
+  /// Converts a string to its equivalent string representation that is encoded
+  /// </summary>
+  /// <param name="password">Your password as string</param>
+  /// <param name="convertinfo">Convert information</param>
+  /// <returns>The string representation, in encoding, of the contents of inArray.</returns>
+  /// <exception cref="NotImplementedException"></exception>
+  public static string EncodePassword(byte[] password, StringConvertInfo convertinfo)
+  {
+    return convertinfo switch
     {
-      StringConvertInfo.None => password,
-      StringConvertInfo.Hex => Convert.ToHexString(bytes),
-      StringConvertInfo.Base64 => Convert.ToBase64String(bytes),
-      StringConvertInfo.Base62 => Base62.ToBase62String(bytes),
-      StringConvertInfo.Base32 => Base32.ToBase32String(bytes),
+      StringConvertInfo.Hex => Convert.ToHexString(password),
+      StringConvertInfo.Base64 => Convert.ToBase64String(password),
+      StringConvertInfo.Base64Url => Base64Url.ToBase64UrlString(password),
+      StringConvertInfo.Base62 => Base62.ToBase62String(password),
+      StringConvertInfo.Base32 => Base32.ToBase32String(password),
       _ => throw new NotImplementedException()
     };
   }
 
   /// <summary>
-  /// Decode a StringPassword.
+  /// Decode a String-Password. 
+  /// Converts the specified string, which encoded digits, to an equivalent string.
   /// </summary>
-  /// <param name="password">Your encoded password as string</param>
+  /// <param name="encpassword">Your encoded password as string</param>
   /// <param name="pwinfo">Password information</param>
-  /// <returns></returns>
-  public static string DecodePassword(string password, PasswordInfo pwinfo)
-  => DecodePassword(password, pwinfo.StringConvertInfo);
+  /// <returns>A string that is equivalent to encpassword</returns>
+  public static string DecodePassword(string encpassword, PasswordInfo pwinfo)
+  => DecodePassword(encpassword, pwinfo.StringConvertInfo);
 
   /// <summary>
-  /// Decode a StringPassword.
+  /// Decode a String-Password. 
+  /// Converts the specified string, which encoded digits, to an equivalent string.
   /// </summary>
-  /// <param name="password">Your encoded password as string</param>
+  /// <param name="encpassword">Your encoded password as string</param>
   /// <param name="convertinfo">Convert information</param>
-  /// <returns></returns>
-  public static string DecodePassword(string password, StringConvertInfo convertinfo)
+  /// <returns>A string that is equivalent to encpassword</returns>
+  public static string DecodePassword(string encpassword, StringConvertInfo convertinfo)
   {
     if (convertinfo == StringConvertInfo.None)
-      return password;
+      return encpassword; 
+    return Encoding.UTF8.GetString(DecodePasswordToBytes(encpassword,convertinfo));
+  }
+
+  /// <summary>
+  /// Decode a String-Password. 
+  /// Converts the specified string, which encoded digits, to an equivalent string.
+  /// </summary>
+  /// <param name="encpassword">Your encoded password as string</param>
+  /// <param name="convertinfo">Convert information</param>
+  /// <returns>A string that is equivalent to encpassword</returns>
+  public static byte[] DecodePasswordToBytes(string encpassword, StringConvertInfo convertinfo)
+  {
+    if (convertinfo == StringConvertInfo.None)
+      return Encoding.UTF8.GetBytes(encpassword);
 
     var result = Array.Empty<byte>();
     switch (convertinfo)
     {
-      case StringConvertInfo.Hex: result = Convert.FromHexString(password); break;
-      case StringConvertInfo.Base64: result = Convert.FromBase64String(password); break;
-      case StringConvertInfo.Base62: result = Base62.FromBase62String(password); break;
-      case StringConvertInfo.Base32: result = Base32.FromBase32String(password); break;
+      case StringConvertInfo.Hex: result = Convert.FromHexString(encpassword); break;
+      case StringConvertInfo.Base64: result = Convert.FromBase64String(encpassword); break;
+      case StringConvertInfo.Base64Url: result = Base64Url.FromBase64UrlString(encpassword); break;
+      case StringConvertInfo.Base62: result = Base62.FromBase62String(encpassword); break;
+      case StringConvertInfo.Base32: result = Base32.FromBase32String(encpassword); break;
     }
-    return Encoding.UTF8.GetString(result);
+    return result;
   }
 }
 

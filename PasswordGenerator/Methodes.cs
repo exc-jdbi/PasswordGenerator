@@ -49,6 +49,4 @@ partial class PasswordGenerator
         $"Password must be maximale length = {PASSWORD_MAX_SIZE}");
   }
 
-  private static string ToRngSpecialCharacters()
-    => string.Join(string.Empty, " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".OrderBy(c => CRand.Next()));
 }
