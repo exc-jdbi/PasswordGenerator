@@ -116,7 +116,7 @@ public partial class FrmMain : Form
     if (this.CbLetters.Checked)
     {
       var originalpw = PwGenerator.DecodePassword(this.TbOutput.Text, pwinfo.StringConvertInfo);
-      pwstrength = PwGenerator.PasswordStrengthChecker(originalpw); 
+      pwstrength = PwGenerator.PasswordStrengthChecker(originalpw);
     }
     else
     {
@@ -163,7 +163,7 @@ public partial class FrmMain : Form
         case var case4 when case4 == PasswordStrength.Secure:
           {
             withBlock.BackColor = Color.Green;
-            this.PlOutput.BackColor = Color.Green; 
+            this.PlOutput.BackColor = Color.Green;
             this.LbPasswordStrength.ForeColor = Color.White;
             break;
           }
@@ -292,6 +292,8 @@ public partial class FrmMain : Form
 
   private void ReSetHandleCheckbox(CheckBox[] cbox, bool _set)
   {
+#pragma warning disable CS8622 // Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem Zieldelegaten.
+
     if (cbox is null)
       return;
     foreach (var cb in cbox)
@@ -324,6 +326,8 @@ public partial class FrmMain : Form
         cb.CheckedChanged -= this.CheckboxVariant_CheckedChanged;
       }
     }
+#pragma warning restore CS8622 // Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem Zieldelegaten.
+
   }
 
   private static void ResetCheckedCheckbox(CheckBox[] cbox, bool _set)
@@ -362,5 +366,5 @@ public partial class FrmMain : Form
 
     return Array.Empty<CheckBox>();
   }
-   
+
 }
