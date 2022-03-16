@@ -7,7 +7,7 @@ namespace exc.jdbi.Converts;
 /// Converts a subset of an array of 8-bit unsigned integers to its 
 /// equivalent string representation that is encoded with Base62 digits.
 /// </summary>
-public class Base62
+public sealed class Base62
 {
   private const char CodeFlag = '9';
   private static string Digits = string.Empty;
@@ -20,7 +20,7 @@ public class Base62
   /// <returns>The string representation, in base62, of the contents of data.</returns>
   public static string ToBase62String(byte[] data, string? defaultstr = null)
   {
-    //Nur für kleine Arraylängen, da die Base62-Convertierung über
+    //Nur für kleine Arraylängen, da die Base62-Konvertierung über
     //das Zahlensystem bewerksteligt wird. Nsc hat einfach seine Zeit.
     AssertBase62(data, defaultstr);
     if (data.Length == 0) return string.Empty;
@@ -41,7 +41,7 @@ public class Base62
   /// <returns>An array of 8-bit unsigned integers that is equivalent to base62str.</returns>
   public static byte[] FromBase62String(string base62str, string? defaultstr = null)
   {
-    //Nur für kleine Arraylängen, da die Base62-Convertierung über
+    //Nur für kleine Arraylängen, da die Base62-Konvertierung über
     //das Zahlensystem bewerksteligt wird. Nsc hat einfach seine Zeit.
     AssertBase62(base62str, defaultstr);
     Digits = string.IsNullOrEmpty(defaultstr) ? DefaultDigits() : defaultstr;
@@ -195,7 +195,7 @@ public class Base62
         }
       default:
         throw new ArgumentOutOfRangeException(nameof(m),
-  $"{nameof(m)} must be 0 - 3");
+          $"{nameof(m)} must be 0 - 3");
     }
     codemap.Clear();
     return result.ToArray();
@@ -257,7 +257,7 @@ public class Base62
   public static byte[] CleanPreviousZeros(byte[] bytes)
   {
     //Vorangehende Nullen werden von Nsc beachtet, und wieder
-    //als vornagehende Nullen hinzugefügt.
+    //als vorangehende Nullen hinzugefügt.
     int count = 0, idx = 0;
     while (bytes[idx++] == 0) count++;
     return bytes.Skip(count).ToArray();

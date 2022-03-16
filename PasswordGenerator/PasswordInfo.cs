@@ -2,10 +2,7 @@
 
 using exc.jdbi.Converts;
 
-/// <summary>
-/// Password Infos
-/// </summary>
-public class PasswordInfo
+public sealed class PasswordInfo
 {
   public int Length;
   public bool NumericLetters;

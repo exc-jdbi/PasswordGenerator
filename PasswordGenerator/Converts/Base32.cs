@@ -6,7 +6,7 @@ namespace exc.jdbi.Converts;
 /// Converts a subset of an array of 8-bit unsigned integers to its 
 /// equivalent string representation that is encoded with Base32 digits.
 /// </summary>
-public class Base32
+public sealed class Base32
 {
   private const int SHIFT_SIZE = 5;
   private const int MASK_SIZE = 31;

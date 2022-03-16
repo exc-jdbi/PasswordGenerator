@@ -1,14 +1,18 @@
 ﻿
 namespace exc.jdbi.PasswordCheckers;
 using CRand = Randoms.CryptoRandom;
-internal class PasswordCheckers
+
+/// <summary>
+/// Tools for the determination of the password strength.
+/// </summary>
+internal sealed class PasswordCheckers
 {
 
   public const int PASSWORD_MIN_SIZE = 10;
   public const int PASSWORD_MAX_SIZE = 1024;
 
   /// <summary>
-  /// Old version of the determination of the password strength
+  /// Old version of the determination of the password strength.
   /// </summary>
   /// <param name="password">Your Password</param>
   /// <returns>password strength</returns>
@@ -46,7 +50,13 @@ internal class PasswordCheckers
   /// <param name="password">Your Password/param>
   /// <returns>password strength</returns>
   internal static PasswordStrength ToPasswordStrength(byte[] password)
-  { 
+  {
+    //Die Byte-Variante müsste eigentlich eine eigene 
+    //Rpl-Rechnung nachgehen, da die Werte von 0 - 255 sind.
+    //Schlussendlich macht das aber auf die Gesamtbewertung,
+    //einen sehr kleinen Unterschied, weshalb ich die Byte-
+    //Variante auch über die gleiche Berechnung wie die String-
+    //Variante laufen lasse.
     var ints = password.Select(c => Convert.ToInt32(c)).ToArray();
     return ToPasswordStrength(ints, true);
   }
@@ -71,7 +81,7 @@ internal class PasswordCheckers
 
     result += ToPasswordLengthResult(password.Length);
 
-    if (_bytevariant)
+    if (_bytevariant && sums[4] == 0)
       //For ByteVariant here 1 point more.
       // because Rng-Items 0 - 255
       result += 1;
@@ -108,8 +118,7 @@ internal class PasswordCheckers
       < 2.85 => 3,
       _ => 4,
     };
-  }
-
+  } 
 
   private static int ToPermutationEntropyResult(double permutationentropie)
   {
@@ -164,6 +173,7 @@ internal class PasswordCheckers
     var permutationentropienorm = 1.0 / Math.Log(Factorial(dimension), 2) * permutationentropie;
     return (float)permutationentropienorm;
   } 
+
   private static double ShannonEntropy(int[] password)
   {
     //Provides information about how many different characters
@@ -181,6 +191,7 @@ internal class PasswordCheckers
       probably[i] = values[i] / (double)password.Length;
     return (float)probably.Select(x => x * Math.Log(1 / x, 2)).ToArray().Sum();
   }
+
   private static double BfManyRplYears(int[] sums, int pwlength)
   {
     var rpl = ToRpl(sums, pwlength);
@@ -191,7 +202,7 @@ internal class PasswordCheckers
     years -= Math.Log2(3600);  //To hours
     years -= Math.Log2(24);    //To days
     years -= Math.Log2(365);   //To years
-    return years - Math.Log2(2); // half
+    return years - Math.Log2(2); // half (-1)
   }
 
   private static double ToRpl(int[] sums, int pwlength)
@@ -221,11 +232,11 @@ internal class PasswordCheckers
   {
     var sum = new int[5];
     var sc = ToRngSpecialCharacters().Select(c => (int)c).ToArray();
-    if (!password.Any(c => 0U == (int)c))
+    if (!password.Any(c => 0U == c))
     {
-      sum[0] = password.Where(c => (int)c >= 48U && (int)c <= 57U).Count();
-      sum[1] = password.Where(c => (int)c >= 64U && (int)c <= 90U).Count();
-      sum[2] = password.Where(c => (int)c >= 97U && (int)c <= 122U).Count();
+      sum[0] = password.Where(c => c >= 48U && c <= 57U).Count();
+      sum[1] = password.Where(c => c >= 64U && c <= 90U).Count();
+      sum[2] = password.Where(c => c >= 97U && c <= 122U).Count();
       sum[3] = password.Where(c => sc.Contains(c)).Count();
       sum[4] = password.Length - sum.Sum();
       return sum;

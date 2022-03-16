@@ -16,60 +16,60 @@ public partial class FrmMain : Form
   {
     switch (true)
     {
-      case object _ when object.ReferenceEquals(sender, this.CbNone):
-        {
-          CheckBoxHandling(sender);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbNone):
+      {
+        CheckBoxHandling(sender);
+        break;
+      }
 
-      case object _ when object.ReferenceEquals(sender, this.CbHex):
-        {
-          CheckBoxHandling(sender);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbHex):
+      {
+        CheckBoxHandling(sender);
+        break;
+      }
 
-      case object _ when object.ReferenceEquals(sender, this.CbB32):
-        {
-          CheckBoxHandling(sender);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbB32):
+      {
+        CheckBoxHandling(sender);
+        break;
+      }
 
-      case object _ when object.ReferenceEquals(sender, this.CbB62):
-        {
-          CheckBoxHandling(sender);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbB62):
+      {
+        CheckBoxHandling(sender);
+        break;
+      }
 
-      case object _ when object.ReferenceEquals(sender, this.CbB64):
-        {
-          CheckBoxHandling(sender);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbB64):
+      {
+        CheckBoxHandling(sender);
+        break;
+      }
 
-      case object _ when object.ReferenceEquals(sender, this.CbB64Url):
-        {
-          CheckBoxHandling(sender);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbB64Url):
+      {
+        CheckBoxHandling(sender);
+        break;
+      }
     }
   }
   private void CheckboxVariant_CheckedChanged(object sender, EventArgs e)
   {
     switch (true)
     {
-      case object _ when object.ReferenceEquals(sender, this.CbLetters):
-        {
-          CheckBoxHandling(sender);
-          SetEnableComboBox(true);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbLetters):
+      {
+        CheckBoxHandling(sender);
+        SetEnableComboBox(true);
+        break;
+      }
 
-      case object _ when object.ReferenceEquals(sender, this.CbBytes):
-        {
-          CheckBoxHandling(sender);
-          SetEnableComboBox(false);
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.CbBytes):
+      {
+        CheckBoxHandling(sender);
+        SetEnableComboBox(false);
+        break;
+      }
     }
   }
 
@@ -87,17 +87,17 @@ public partial class FrmMain : Form
   {
     switch (true)
     {
-      case object _ when object.ReferenceEquals(sender, this.PbCopy):
-        {
-          if (!string.IsNullOrEmpty(this.TbOutput.Text))
-            Clipboard.SetText(this.TbOutput.Text);
-          break;
-        }
-      case object _ when object.ReferenceEquals(sender, this.PbClear):
-        {
-          this.TbOutput.Clear();
-          break;
-        }
+      case object _ when ReferenceEquals(sender, this.PbCopy):
+      {
+        if (!string.IsNullOrEmpty(this.TbOutput.Text))
+          Clipboard.SetText(this.TbOutput.Text);
+        break;
+      }
+      case object _ when ReferenceEquals(sender, this.PbClear):
+      {
+        this.TbOutput.Clear();
+        break;
+      }
     }
   }
 
@@ -116,7 +116,7 @@ public partial class FrmMain : Form
     if (this.CbLetters.Checked)
     {
       var originalpw = PwGenerator.DecodePassword(this.TbOutput.Text, pwinfo.StringConvertInfo);
-      pwstrength = PwGenerator.PasswordStrengthChecker(originalpw);
+      pwstrength = PwGenerator.PasswordStrengthChecker(originalpw); 
     }
     else
     {
@@ -133,40 +133,40 @@ public partial class FrmMain : Form
       switch (pwstrength)
       {
         case var @case when @case == PasswordStrength.Unacceptable:
-          {
-            withBlock.BackColor = Color.Red;
-            this.PlOutput.BackColor = Color.Red;
-            break;
-          }
+        {
+          withBlock.BackColor = Color.Red;
+          this.PlOutput.BackColor = Color.Red;
+          break;
+        }
 
-        case var case1 when case1 == PasswordStrength.Weak:
-          {
-            withBlock.BackColor = Color.PeachPuff;
-            this.PlOutput.BackColor = Color.PeachPuff;
-            break;
-          }
+        case var @case when @case == PasswordStrength.Weak:
+        {
+          withBlock.BackColor = Color.PeachPuff;
+          this.PlOutput.BackColor = Color.PeachPuff;
+          break;
+        }
 
-        case var case2 when case2 == PasswordStrength.Ok:
-          {
-            withBlock.BackColor = Color.Yellow;
-            this.PlOutput.BackColor = Color.Yellow;
-            break;
-          }
+        case var @case when @case == PasswordStrength.Ok:
+        {
+          withBlock.BackColor = Color.Yellow;
+          this.PlOutput.BackColor = Color.Yellow;
+          break;
+        }
 
-        case var case3 when case3 == PasswordStrength.Strong:
-          {
-            withBlock.BackColor = Color.LightGreen;
-            this.PlOutput.BackColor = Color.LightGreen;
-            break;
-          }
+        case var @case when @case == PasswordStrength.Strong:
+        {
+          withBlock.BackColor = Color.LightGreen;
+          this.PlOutput.BackColor = Color.LightGreen;
+          break;
+        }
 
-        case var case4 when case4 == PasswordStrength.Secure:
-          {
-            withBlock.BackColor = Color.Green;
-            this.PlOutput.BackColor = Color.Green;
-            this.LbPasswordStrength.ForeColor = Color.White;
-            break;
-          }
+        case var @case when @case == PasswordStrength.Secure:
+        {
+          withBlock.BackColor = Color.Green;
+          this.PlOutput.BackColor = Color.Green; 
+          this.LbPasswordStrength.ForeColor = Color.White;
+          break;
+        }
       }
     }
   }
@@ -182,13 +182,15 @@ public partial class FrmMain : Form
     }
     else
     {
+      //Byte-Variant
       var bytes = PwGenerator.PasswordBytes((int)this.NudLength.Value);
       var cbox = ToCheckBoxGroup(1);
       StringConvertInfo stringconvertinfo;
-      for (int i = 0, loopTo = cbox.Length - 1; i <= loopTo; i++)
+      for (int i = 0; i < cbox.Length; i++)
       {
         if (cbox[i].Checked)
         {
+          //Default Byte-Variant is hex.
           // If 'none' selected, then set 'hex'.
           if (i == 0)
           {
@@ -206,13 +208,15 @@ public partial class FrmMain : Form
 
   private PasswordInfo ToPasswordInfo()
   {
-    var pwinfo = new PasswordInfo();
-    pwinfo.Length = (int)this.NudLength.Value;
-    pwinfo.NumericLetters = this.CbNumerics.Checked;
-    pwinfo.UppercaseCharacters = this.CbUppers.Checked;
-    pwinfo.LowercaseCharacters = this.CbLowers.Checked;
-    pwinfo.SpecialCharacters = this.CbSpecialCharacters.Checked;
-    pwinfo.InternationalSymbols = this.CbInternationalSymbols.Checked;
+    var pwinfo = new PasswordInfo
+    {
+      Length = (int)this.NudLength.Value,
+      NumericLetters = this.CbNumerics.Checked,
+      UppercaseCharacters = this.CbUppers.Checked,
+      LowercaseCharacters = this.CbLowers.Checked,
+      SpecialCharacters = this.CbSpecialCharacters.Checked,
+      InternationalSymbols = this.CbInternationalSymbols.Checked
+    };
     var cbox = ToCheckBoxGroup(1);
     for (int i = 0; i < cbox.Length; i++)
     {
@@ -255,18 +259,11 @@ public partial class FrmMain : Form
         if (cb.Checked)
         {
           if (i == 0)
-          {
             this.GbAdditionalOptions.ForeColor = this.DefForeColor;
-          }
           else if (i == 1)
-          {
             this.GbEncoding.ForeColor = this.DefForeColor;
-          }
           else if (i == 2)
-          {
             this.GbPasswordVariants.ForeColor = this.DefForeColor;
-          }
-
           cbcnt[i] = 1;
           break;
         }
@@ -302,29 +299,15 @@ public partial class FrmMain : Form
       int cbtag = Convert.ToInt32(cb.Tag);
       if (_set)
       {
-        if (cbtag == 0)
-        {
-        }
+        if (cbtag == 0) { }
         else if (cbtag == 1)
-        {
           cb.CheckedChanged += this.CheckboxEncoding_CheckedChanged;
-        }
-        else
-        {
-          cb.CheckedChanged += this.CheckboxVariant_CheckedChanged;
-        }
+        else cb.CheckedChanged += this.CheckboxVariant_CheckedChanged;
       }
-      else if (cbtag == 0)
-      {
-      }
-      else if (cbtag == 1)
-      {
-        cb.CheckedChanged -= this.CheckboxEncoding_CheckedChanged;
-      }
-      else
-      {
-        cb.CheckedChanged -= this.CheckboxVariant_CheckedChanged;
-      }
+      else if (cbtag == 0) { }
+      else if (cbtag == 1) 
+        cb.CheckedChanged -= this.CheckboxEncoding_CheckedChanged; 
+      else cb.CheckedChanged -= this.CheckboxVariant_CheckedChanged; 
     }
 #pragma warning restore CS8622 // Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem Zieldelegaten.
 
@@ -346,25 +329,13 @@ public partial class FrmMain : Form
 
   private CheckBox[] ToCheckBoxGroup(int checkboxtagnumber)
   {
-    switch (checkboxtagnumber)
+    return checkboxtagnumber switch
     {
-      case 0:
-        {
-          return new CheckBox[] { this.CbNumerics, this.CbLowers, this.CbUppers, this.CbSpecialCharacters, this.CbInternationalSymbols };
-        }
-
-      case 1:
-        {
-          return new CheckBox[] { this.CbNone, this.CbHex, this.CbB32, this.CbB62, this.CbB64, this.CbB64Url };
-        }
-
-      case 2:
-        {
-          return new CheckBox[] { this.CbLetters, this.CbBytes };
-        }
-    }
-
-    return Array.Empty<CheckBox>();
+      0 => new CheckBox[] { this.CbNumerics, this.CbLowers, this.CbUppers, this.CbSpecialCharacters, this.CbInternationalSymbols },
+      1 => new CheckBox[] { this.CbNone, this.CbHex, this.CbB32, this.CbB62, this.CbB64, this.CbB64Url },
+      2 => new CheckBox[] { this.CbLetters, this.CbBytes },
+      _ => Array.Empty<CheckBox>(),
+    };
   }
-
+   
 }

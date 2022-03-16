@@ -26,7 +26,7 @@ internal sealed class CryptoRandom
     return ToI32Positive(result);
   }
 
-  internal static int Next(int max)
+  public static int Next(int max)
   => Next(0, max);
 
   internal static int Next(int min, int max)
@@ -40,7 +40,7 @@ internal sealed class CryptoRandom
     var bytes = new byte[sz];
     Rand.GetNonZeroBytes(bytes);
     var scale = bytes[0] | (uint)(bytes[1] << 8) | (uint)(bytes[2] << 16) | (uint)(bytes[3] << 24);
-    return ToI32Positive((uint)(min + (max - min) * (scale / (double)uint.MaxValue)));
+    return ToI32Positive((uint)(min + (max - min) * (scale / (double)(uint.MaxValue + 1.0))));
   }
 
   private static int ToI32Positive(uint number)

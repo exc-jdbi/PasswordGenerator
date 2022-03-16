@@ -7,7 +7,7 @@ using exc.jdbi.Converts;
 using exc.jdbi.PasswordCheckers;
 using CRand = Randoms.CryptoRandom;
 
-public partial class PasswordGenerator
+public sealed partial class PasswordGenerator
 {
   /// <summary>
   /// Minimum size of a password.
@@ -134,13 +134,6 @@ public partial class PasswordGenerator
     return EncodePassword(bytes, convertinfo);
   }
 
-  /// <summary>
-  /// Converts a string to its equivalent string representation that is encoded
-  /// </summary>
-  /// <param name="password">Your password as string</param>
-  /// <param name="convertinfo">Convert information</param>
-  /// <returns>The string representation, in encoding, of the contents of inArray.</returns>
-  /// <exception cref="NotImplementedException"></exception>
   public static string EncodePassword(byte[] password, StringConvertInfo convertinfo)
   {
     return convertinfo switch
@@ -158,7 +151,7 @@ public partial class PasswordGenerator
   /// Decode a String-Password. 
   /// Converts the specified string, which encoded digits, to an equivalent string.
   /// </summary>
-  /// <param name="encpassword">Your encoded password as string</param>
+  /// <param name="password">Your encoded password as string</param>
   /// <param name="pwinfo">Password information</param>
   /// <returns>A string that is equivalent to encpassword</returns>
   public static string DecodePassword(string encpassword, PasswordInfo pwinfo)
@@ -168,7 +161,7 @@ public partial class PasswordGenerator
   /// Decode a String-Password. 
   /// Converts the specified string, which encoded digits, to an equivalent string.
   /// </summary>
-  /// <param name="encpassword">Your encoded password as string</param>
+  /// <param name="password">Your encoded password as string</param>
   /// <param name="convertinfo">Convert information</param>
   /// <returns>A string that is equivalent to encpassword</returns>
   public static string DecodePassword(string encpassword, StringConvertInfo convertinfo)
@@ -178,13 +171,6 @@ public partial class PasswordGenerator
     return Encoding.UTF8.GetString(DecodePasswordToBytes(encpassword,convertinfo));
   }
 
-  /// <summary>
-  /// Decode a String-Password. 
-  /// Converts the specified string, which encoded digits, to an equivalent string.
-  /// </summary>
-  /// <param name="encpassword">Your encoded password as string</param>
-  /// <param name="convertinfo">Convert information</param>
-  /// <returns>A string that is equivalent to encpassword</returns>
   public static byte[] DecodePasswordToBytes(string encpassword, StringConvertInfo convertinfo)
   {
     if (convertinfo == StringConvertInfo.None)

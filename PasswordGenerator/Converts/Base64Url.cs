@@ -6,7 +6,7 @@ namespace exc.jdbi.Converts;
 /// Converts a subset of an array of 8-bit unsigned integers to its 
 /// equivalent string representation that is encoded with Base64Url digits.
 /// </summary>
-public class Base64Url
+public sealed class Base64Url
 {
   /// <summary>
   /// Converts an array of 8-bit unsigned integers to its 

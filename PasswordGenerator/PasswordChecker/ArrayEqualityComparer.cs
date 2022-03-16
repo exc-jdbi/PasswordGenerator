@@ -1,7 +1,7 @@
 ﻿
 
 namespace exc.jdbi.PasswordCheckers;
-public class ArrayEqualityComparer : IEqualityComparer<int[]>
+internal sealed class ArrayEqualityComparer : IEqualityComparer<int[]>
 {
 #pragma warning disable CS8767 // Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem implizit implementierten Member.
   public bool Equals(int[] x, int[] y)

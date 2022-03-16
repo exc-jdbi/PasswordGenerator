@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-      Me.MainForm = Global.AppPasswordGeneratorVb.exc.jdbi.PasswordGenerator.App.Vb.FrmMain
-    End Sub
+            Me.MainForm = Global.AppPasswordGeneratorVb.Form1
+        End Sub
     End Class
 End Namespace
