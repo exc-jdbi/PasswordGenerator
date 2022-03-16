@@ -5,9 +5,8 @@ Imports exc.jdbi.PasswordCheckers
 Imports exc.jdbi.PasswordGenerators
 Imports PwGenerator = exc.jdbi.PasswordGenerators.PasswordGenerator
 
-Namespace exc.jdbi.PasswordGenerator.App.Vb
-
-  Public Class FrmMain
+Namespace exc.jdbi.GeneratorPassword.App.TestVb
+  Public Class FrmTestMain
     Private ReadOnly DefForeColor As Color = SystemColors.ControlText
     Private Sub CheckboxEncoding_CheckedChanged(sender As Object, e As EventArgs) _
     Handles CbHex.CheckedChanged, CbB32.CheckedChanged, CbB62.CheckedChanged,
@@ -34,14 +33,25 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       End Select
     End Sub
 
-    Private Sub PitureBox_Click(sender As Object, e As EventArgs) Handles PbClear.Click, PbCopy.Click
-      Select Case True
-        Case sender Is Me.PbClear : Me.TbOutput.Clear()
-        Case sender Is Me.PbCopy : Clipboard.SetText(Me.TbOutput.Text)
-      End Select
+    Private Sub NudLength_ValueChanged(sender As Object, e As EventArgs) Handles NudLength.ValueChanged
+      Dim nudvalue = DirectCast(sender, NumericUpDown).Value
+      Me.TbLength.Enabled = False
+      RemoveHandler Me.TbLength.Scroll, AddressOf Me.TbLength_Scroll
+      Me.TbLength.Value = Convert.ToInt32(nudvalue)
+      AddHandler Me.TbLength.Scroll, AddressOf Me.TbLength_Scroll
+      Me.TbLength.Enabled = True
     End Sub
 
-    Private Sub BtGenerate_Click(sender As Object, e As EventArgs) Handles BtPasswordGenerate.Click
+    Private Sub TbLength_Scroll(sender As Object, e As EventArgs) Handles TbLength.Scroll
+      Dim tbvalue = DirectCast(sender, TrackBar).Value
+      Me.NudLength.Enabled = False
+      RemoveHandler Me.NudLength.ValueChanged, AddressOf Me.NudLength_ValueChanged
+      Me.NudLength.Value = tbvalue
+      AddHandler Me.NudLength.ValueChanged, AddressOf Me.NudLength_ValueChanged
+      Me.NudLength.Enabled = True
+    End Sub
+
+    Private Sub BtGenerate_Click(sender As Object, e As EventArgs) Handles BtGenerate.Click
       Me.TbOutput.Clear()
       If Me.CheckAllParameter() Then
         Me.GeneratePassword()
@@ -50,11 +60,10 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
     End Sub
 
     Private Sub SetEnableComboBox(_enable As Boolean)
-      'Dim addopt = Me.ToCheckBoxGroup(0)
-      'For Each g In addopt
-      '  g.Enabled = _enable
-      'Next
-      Me.GbAdditionalOptions.Enabled = _enable
+      Dim groupvariant = Me.ToCheckBoxGroup(0)
+      For Each g In groupvariant
+        g.Enabled = _enable
+      Next
     End Sub
 
     Private Sub CalcPasswordStrength()
@@ -67,29 +76,15 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
         Dim originalpw = PwGenerator.DecodePasswordToBytes(Me.TbOutput.Text, pwinfo.StringConvertInfo)
         pwstrength = PwGenerator.PasswordStrengthChecker(originalpw)
       End If
-      With Me.LbPasswordStrength
+      With Me.TsslPasswordStrength
         .BackColor = Color.Red
-        .ForeColor = Me.DefForeColor
-        Me.PlOutput.BackColor = Color.Transparent
         .Text = $"PasswordStrength = {pwstrength}"
         Select Case pwstrength
-          Case PasswordStrength.Unacceptable
-            .BackColor = Color.Red
-            Me.PlOutput.BackColor = Color.Red
-          Case PasswordStrength.Weak
-            .BackColor = Color.PeachPuff
-            Me.PlOutput.BackColor = Color.PeachPuff
-          Case PasswordStrength.Ok
-            .BackColor = Color.Yellow
-            Me.PlOutput.BackColor = Color.Yellow
-          Case PasswordStrength.Strong
-            .BackColor = Color.LightGreen
-            Me.PlOutput.BackColor = Color.LightGreen
-          Case PasswordStrength.Secure
-            .BackColor = Color.Green
-            .ForeColor = Color.White
-            Me.PlOutput.BackColor = Color.Green
-
+          Case PasswordStrength.Unacceptable : .BackColor = Color.Red
+          Case PasswordStrength.Weak : .BackColor = Color.PeachPuff
+          Case PasswordStrength.Ok : .BackColor = Color.Yellow
+          Case PasswordStrength.Strong : .BackColor = Color.LightGreen
+          Case PasswordStrength.Secure : .BackColor = Color.Green
         End Select
       End With
     End Sub
@@ -101,13 +96,11 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
         pwinfo = Me.ToPasswordInfo()
         Me.TbOutput.Text = PwGenerator.PasswordString(pwinfo)
       Else
-        'Byte-Variant
-        Dim bytes = PwGenerator.PasswordBytes(Convert.ToInt32(Me.NudLength.Value))
+        Dim bytes = PwGenerator.PasswordBytes(Me.TbLength.Value)
         Dim cbox = Me.ToCheckBoxGroup(1)
         Dim stringconvertinfo As StringConvertInfo
         For i = 0 To cbox.Length - 1
           If cbox(i).Checked Then
-            ' Default Byte-Variant is 'hex'
             ' If 'none' selected, then set 'hex'.
             If i = 0 Then i += 1 : cbox(i).Checked = True
             stringconvertinfo = DirectCast(i, StringConvertInfo)
@@ -121,7 +114,7 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
     Private Function ToPasswordInfo() As PasswordInfo
       Dim pwinfo As New PasswordInfo
       With pwinfo
-        .Length = Convert.ToInt32(Me.NudLength.Value)
+        .Length = Me.TbLength.Value
         .NumericLetters = Me.CbNumerics.Checked
         .UppercaseCharacters = Me.CbUppers.Checked
         .LowercaseCharacters = Me.CbLowers.Checked
@@ -140,13 +133,13 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
     End Function
 
     Private Function CheckAllParameter() As Boolean
-      Me.GbEncoding.ForeColor = Color.Red
-      Me.GbPasswordVariants.ForeColor = Color.Red
-      Me.GbAdditionalOptions.ForeColor = Color.Red
+      Me.LbEncoding.ForeColor = Color.Red
+      Me.LbPwVariant.ForeColor = Color.Red
+      Me.LbAdditionalOption.ForeColor = Color.Red
       If Me.CheckCheckboxes() Then
-        Me.GbGeneratePassword.ForeColor = Color.Red
+        Me.LbLength.ForeColor = Color.Red
         If Me.NudLength.Value >= 10 AndAlso Me.NudLength.Value <= 1024 Then
-          Me.GbGeneratePassword.ForeColor = Me.DefForeColor
+          Me.LbLength.ForeColor = Me.DefForeColor
           Return True
         End If
       End If
@@ -160,11 +153,11 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
         For Each cb In cbgroup
           If cb.Checked Then
             If i = 0 Then
-              Me.GbAdditionalOptions.ForeColor = Me.DefForeColor
+              Me.LbAdditionalOption.ForeColor = Me.DefForeColor
             ElseIf i = 1 Then
-              Me.GbEncoding.ForeColor = Me.DefForeColor
+              Me.LbEncoding.ForeColor = Me.DefForeColor
             ElseIf i = 2 Then
-              Me.GbPasswordVariants.ForeColor = Me.DefForeColor
+              Me.LbPwVariant.ForeColor = Me.DefForeColor
             End If
             cbcnt(i) = 1
             Exit For
