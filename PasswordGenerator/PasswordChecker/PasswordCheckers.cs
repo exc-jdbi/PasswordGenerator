@@ -149,7 +149,7 @@ internal sealed class PasswordCheckers
     //Gives information about how many different characters are
     //present in the password, and at the same time, in which
     //relation they are to the neighboring character.
-    //>> See and lern more about Google.
+    //>> See and lern more via Google.
     //https://de.wikipedia.org/wiki/Permutationsentropie
     //https://en.wikipedia.org/wiki/Entropy_(information_theory)#Efficiency_(normalized_entropy)
 
