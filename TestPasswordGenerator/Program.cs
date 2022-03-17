@@ -162,28 +162,4 @@ public class Program
   }
 
 
-  //private static void TestCRandom()
-  //{
-  //  for (int j = 0; j < 10000; j++)
-  //  {
-  //    var count = 1000;
-  //    var ints = new int[count];
-  //    for (int i = 0; i < count; i++)
-  //      ints[i] = CRand.Next(2);
-
-  //    var result = new int[3];
-  //    result[0] = ints.Where(x => x == 0).Count();
-  //    result[1] = ints.Where(x => x == 1).Count();
-  //    result[2] = count - result.Sum();
-  //    if (result[2] != 0)
-  //      Debugger.Break(); 
-
-  //    if (count/2.0 * .85 >= result[0])
-  //      Debugger.Break();
-
-  //    if (count / 2.0 * .85 >= result[1])
-  //      Debugger.Break();
-  //  }
-  //}
-
 }
