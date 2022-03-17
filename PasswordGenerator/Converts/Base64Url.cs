@@ -15,7 +15,7 @@ public sealed class Base64Url
   /// <param name="bytes">An array of 8-bit unsigned integers.</param>
   /// <returns>The string representation, in Base64Url, of the contents of bytes.</returns>
   public static string ToBase64UrlString(byte[] bytes)
-  { 
+  {
     var result = Convert.ToBase64String(bytes);
     result = result.Split('=')[0];     // First pad before '=' 
     result = result.Replace('+', '-'); // 62nd 
@@ -44,6 +44,6 @@ public sealed class Base64Url
       case 3: result += "="; break;   // One pad 
       default: throw new FormatException("Illegal base64url string!");
     }
-    return Convert.FromBase64String(result);  
+    return Convert.FromBase64String(result);
   }
 }

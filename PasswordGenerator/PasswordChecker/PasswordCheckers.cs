@@ -16,11 +16,11 @@ internal sealed class PasswordCheckers
   /// </summary>
   /// <param name="password">Your Password</param>
   /// <returns>password strength</returns>
-  [Obsolete("This property is obsolete. Use ToPasswordStrength instead.", false)]
+  [Obsolete("This method is obsolete. Use ToPasswordStrength instead.", false)]
   internal static PasswordStrength ToPasswordStrengthOld(string password)
   {
     var ints = password.Select(c => Convert.ToInt32(c)).ToArray();
-    var sums = ToPasswordSum(ints);
+    var sums = ToPasswordSums(ints);
     var score = password.Length * 3;
     Array.ForEach(sums, x => score += Math.Min(2, x) * 4);
     return score switch
@@ -36,7 +36,7 @@ internal sealed class PasswordCheckers
   /// <summary>
   /// Efficient determination of password strength.
   /// </summary>
-  /// <param name="password">Your Password/param>
+  /// <param name="password">Your Password</param>
   /// <returns>password strength</returns>
   internal static PasswordStrength ToPasswordStrength(string password)
   {
@@ -47,7 +47,7 @@ internal sealed class PasswordCheckers
   /// <summary>
   /// Efficient determination of password strength.
   /// </summary>
-  /// <param name="password">Your Password/param>
+  /// <param name="password">Your Password</param>
   /// <returns>password strength</returns>
   internal static PasswordStrength ToPasswordStrength(byte[] password)
   {
@@ -64,12 +64,12 @@ internal sealed class PasswordCheckers
   /// <summary>
   /// Efficient determination of password strength.
   /// </summary>
-  /// <param name="password">Your Password/param>
+  /// <param name="password">Your Password</param>
   /// <returns>password strength</returns>
   private static PasswordStrength ToPasswordStrength(int[] password, bool _bytevariant)
   {
     AssertPasswordStrength(password);
-    var sums = ToPasswordSum(password);
+    var sums = ToPasswordSums(password);
     var rplyears = BfManyRplYears(sums, password.Length);
     var result = ToRplYearsResult(rplyears);
 
@@ -94,7 +94,7 @@ internal sealed class PasswordCheckers
       <= 15 => PasswordStrength.Strong,
       _ => PasswordStrength.Secure,
     };
-  } 
+  }
 
   private static int ToPasswordLengthResult(int passwordlength)
   {
@@ -118,7 +118,7 @@ internal sealed class PasswordCheckers
       < 2.85 => 3,
       _ => 4,
     };
-  } 
+  }
 
   private static int ToPermutationEntropyResult(double permutationentropie)
   {
@@ -142,20 +142,25 @@ internal sealed class PasswordCheckers
       < 19.9 => 3,
       _ => 4,
     };
-  } 
+  }
 
   private static double PermutationEntropy(int[] password, int dimension = 3)
   {
     //Gives information about how many different characters are
     //present in the password, and at the same time, in which
     //relation they are to the neighboring character.
+    //>> See and lern more about Google.
+    //https://de.wikipedia.org/wiki/Permutationsentropie
+    //https://en.wikipedia.org/wiki/Entropy_(information_theory)#Efficiency_(normalized_entropy)
 
     if (dimension < 2 || dimension > 7)
       throw new ArgumentOutOfRangeException(nameof(dimension));
+
     var solvmatrix = ToMatrix(password, dimension);
 
     var permutationdict =
       new Dictionary<int[], int>(new ArrayEqualityComparer());
+
     foreach (var item in ToColumns(solvmatrix))
     {
       var indexes = Enumerable.Range(0, item.Length).ToArray();
@@ -172,12 +177,13 @@ internal sealed class PasswordCheckers
     var permutationentropie = -relativefrequencies.Sum();
     var permutationentropienorm = 1.0 / Math.Log(Factorial(dimension), 2) * permutationentropie;
     return (float)permutationentropienorm;
-  } 
+  }
 
   private static double ShannonEntropy(int[] password)
   {
     //Provides information about how many different characters
     //are present in the password. 
+    //https://en.wikipedia.org/wiki/Entropy_(information_theory)#Definition
 
     var counts = new Dictionary<int, int>();
     for (int i = 0; i < password.Length; i++)
@@ -194,18 +200,21 @@ internal sealed class PasswordCheckers
 
   private static double BfManyRplYears(int[] sums, int pwlength)
   {
-    var rpl = ToRpl(sums, pwlength);
+    //rpl = Erforderliche Passwortlänge
+    //rpl = Required Password Length = Minimum Password Length
+
+    var rplpl = ToRplPoolLength(sums, pwlength);
 
     //Assumption as of 2022
     //SuperComputer >> Calculation ca. 1E12 / sec 
-    var years = rpl - Math.Log2(1e12);
-    years -= Math.Log2(3600);  //To hours
-    years -= Math.Log2(24);    //To days
-    years -= Math.Log2(365);   //To years
-    return years - Math.Log2(2); // half (-1)
+    var years = rplpl - Math.Log2(1e12);
+    years -= Math.Log2(3600);     // To hours
+    years -= Math.Log2(24);       // To days
+    years -= Math.Log2(365);      // To years
+    return years - Math.Log2(2);  // half (-1)
   }
 
-  private static double ToRpl(int[] sums, int pwlength)
+  private static double ToRplPoolLength(int[] sums, int pwlength)
   {
     var result = 0;
     if (sums[0] != 0) result += 10;
@@ -226,23 +235,23 @@ internal sealed class PasswordCheckers
         result += 1;
     }
     return result;
-  } 
+  }
 
-  private static int[] ToPasswordSum(int[] password)
+  private static int[] ToPasswordSums(int[] password)
   {
-    var sum = new int[5];
+    var sums = new int[5];
     var sc = ToRngSpecialCharacters().Select(c => (int)c).ToArray();
-    if (!password.Any(c => 0U == c))
+    if (!password.Any(c => 0 == c))
     {
-      sum[0] = password.Where(c => c >= 48U && c <= 57U).Count();
-      sum[1] = password.Where(c => c >= 64U && c <= 90U).Count();
-      sum[2] = password.Where(c => c >= 97U && c <= 122U).Count();
-      sum[3] = password.Where(c => sc.Contains(c)).Count();
-      sum[4] = password.Length - sum.Sum();
-      return sum;
+      sums[0] = password.Where(c => c >= 48 && c <= 57).Count();
+      sums[1] = password.Where(c => c >= 64 && c <= 90).Count();
+      sums[2] = password.Where(c => c >= 97 && c <= 122).Count();
+      sums[3] = password.Where(c => sc.Contains(c)).Count();
+      sums[4] = password.Length - sums.Sum();
+      return sums;
     }
     return Array.Empty<int>();
-  } 
+  }
 
   private static float[][] ToMatrix(int[] data, int n)
   {
@@ -280,7 +289,7 @@ internal sealed class PasswordCheckers
         password.Length < PASSWORD_MIN_SIZE ||
         password.Length > PASSWORD_MAX_SIZE)
       throw new ArgumentOutOfRangeException(nameof(password));
-  } 
+  }
 
   internal static string ToRngSpecialCharacters()
   => string.Join(string.Empty, " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".OrderBy(c => CRand.Next()));

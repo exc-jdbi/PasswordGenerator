@@ -167,8 +167,8 @@ public sealed partial class PasswordGenerator
   public static string DecodePassword(string encpassword, StringConvertInfo convertinfo)
   {
     if (convertinfo == StringConvertInfo.None)
-      return encpassword; 
-    return Encoding.UTF8.GetString(DecodePasswordToBytes(encpassword,convertinfo));
+      return encpassword;
+    return Encoding.UTF8.GetString(DecodePasswordToBytes(encpassword, convertinfo));
   }
 
   public static byte[] DecodePasswordToBytes(string encpassword, StringConvertInfo convertinfo)
