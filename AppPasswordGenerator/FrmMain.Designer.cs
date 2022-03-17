@@ -211,6 +211,7 @@ partial class FrmMain
       this.CbInternationalSymbols.Tag = "0";
       this.CbInternationalSymbols.Text = "International Symbols (中国 ...)";
       this.CbInternationalSymbols.UseVisualStyleBackColor = true;
+      this.CbInternationalSymbols.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
       // 
       // CbNumerics
       // 
@@ -226,6 +227,7 @@ partial class FrmMain
       this.CbNumerics.Tag = "0";
       this.CbNumerics.Text = "Numbers (123 ...)";
       this.CbNumerics.UseVisualStyleBackColor = true;
+      this.CbNumerics.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
       // 
       // CbSpecialCharacters
       // 
@@ -238,6 +240,7 @@ partial class FrmMain
       this.CbSpecialCharacters.Tag = "0";
       this.CbSpecialCharacters.Text = "Special Characters (@#$% ...)";
       this.CbSpecialCharacters.UseVisualStyleBackColor = true;
+      this.CbSpecialCharacters.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
       // 
       // CbLowers
       // 
@@ -253,6 +256,7 @@ partial class FrmMain
       this.CbLowers.Tag = "0";
       this.CbLowers.Text = "Lowercase Characters (abc ...)";
       this.CbLowers.UseVisualStyleBackColor = true;
+      this.CbLowers.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
       // 
       // CbUppers
       // 
@@ -267,6 +271,7 @@ partial class FrmMain
       this.CbUppers.Tag = "0";
       this.CbUppers.Text = "Uppercase Characters (ABC ...)";
       this.CbUppers.UseVisualStyleBackColor = true;
+      this.CbUppers.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
       // 
       // GbEncoding
       // 
@@ -304,10 +309,10 @@ partial class FrmMain
       // CbB64Url
       // 
       this.CbB64Url.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.CbB64Url.Location = new System.Drawing.Point(743, 40);
+      this.CbB64Url.Location = new System.Drawing.Point(741, 40);
       this.CbB64Url.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
       this.CbB64Url.Name = "CbB64Url";
-      this.CbB64Url.Size = new System.Drawing.Size(110, 22);
+      this.CbB64Url.Size = new System.Drawing.Size(112, 22);
       this.CbB64Url.TabIndex = 13;
       this.CbB64Url.Tag = "1";
       this.CbB64Url.Text = "Base 64 Url";
@@ -373,10 +378,10 @@ partial class FrmMain
       // CbB64
       // 
       this.CbB64.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.CbB64.Location = new System.Drawing.Point(743, 6);
+      this.CbB64.Location = new System.Drawing.Point(741, 6);
       this.CbB64.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
       this.CbB64.Name = "CbB64";
-      this.CbB64.Size = new System.Drawing.Size(110, 22);
+      this.CbB64.Size = new System.Drawing.Size(112, 22);
       this.CbB64.TabIndex = 12;
       this.CbB64.Tag = "1";
       this.CbB64.Text = "Base 64";

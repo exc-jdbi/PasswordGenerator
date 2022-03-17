@@ -12,64 +12,74 @@ public partial class FrmMain : Form
   {
     this.InitializeComponent();
   }
+
+  private void CheckboxAdditionalOption_CheckedChanged(object sender, EventArgs e)
+  {
+    var cb = (CheckBox)sender ;
+    if (cb is null) return;
+    this.SetBasicMask();
+  }
+
   private void CheckboxEncoding_CheckedChanged(object sender, EventArgs e)
   {
+    this.SetBasicMask();
     switch (true)
     {
       case object _ when ReferenceEquals(sender, this.CbNone):
-      {
-        CheckBoxHandling(sender);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          break;
+        }
 
       case object _ when ReferenceEquals(sender, this.CbHex):
-      {
-        CheckBoxHandling(sender);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          break;
+        }
 
       case object _ when ReferenceEquals(sender, this.CbB32):
-      {
-        CheckBoxHandling(sender);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          break;
+        }
 
       case object _ when ReferenceEquals(sender, this.CbB62):
-      {
-        CheckBoxHandling(sender);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          break;
+        }
 
       case object _ when ReferenceEquals(sender, this.CbB64):
-      {
-        CheckBoxHandling(sender);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          break;
+        }
 
       case object _ when ReferenceEquals(sender, this.CbB64Url):
-      {
-        CheckBoxHandling(sender);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          break;
+        }
     }
   }
   private void CheckboxVariant_CheckedChanged(object sender, EventArgs e)
   {
+    this.SetBasicMask();
     switch (true)
     {
       case object _ when ReferenceEquals(sender, this.CbLetters):
-      {
-        CheckBoxHandling(sender);
-        SetEnableComboBox(true);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          SetEnableComboBox(true);
+          break;
+        }
 
       case object _ when ReferenceEquals(sender, this.CbBytes):
-      {
-        CheckBoxHandling(sender);
-        SetEnableComboBox(false);
-        break;
-      }
+        {
+          CheckBoxHandling(sender);
+          SetEnableComboBox(false);
+          break;
+        }
     }
   }
 
@@ -88,24 +98,29 @@ public partial class FrmMain : Form
     switch (true)
     {
       case object _ when ReferenceEquals(sender, this.PbCopy):
-      {
-        if (!string.IsNullOrEmpty(this.TbOutput.Text))
-          Clipboard.SetText(this.TbOutput.Text);
-        break;
-      }
+        {
+          if (!string.IsNullOrEmpty(this.TbOutput.Text))
+            Clipboard.SetText(this.TbOutput.Text);
+          break;
+        }
       case object _ when ReferenceEquals(sender, this.PbClear):
-      {
-        this.TbOutput.Clear();
-        break;
-      }
+        {
+          this.TbOutput.Clear();
+          this.SetBasicMask();
+          break;
+        }
     }
   }
 
-  private void SetEnableComboBox(bool _enable)
+  private void SetBasicMask()
   {
-    //var addopt = ToCheckBoxGroup(0);
-    //foreach (var g in addopt)
-    //  g.Enabled = _enable;
+    this.TbOutput.Clear();
+    this.PlOutput.BackColor = Color.Transparent;
+    this.LbPasswordStrength.Text = "[PasswordStrength]";
+    this.LbPasswordStrength.BackColor = Color.Transparent;
+  }
+  private void SetEnableComboBox(bool _enable)
+  { 
     this.GbAdditionalOptions.Enabled = _enable;
   }
 
@@ -116,7 +131,7 @@ public partial class FrmMain : Form
     if (this.CbLetters.Checked)
     {
       var originalpw = PwGenerator.DecodePassword(this.TbOutput.Text, pwinfo.StringConvertInfo);
-      pwstrength = PwGenerator.PasswordStrengthChecker(originalpw); 
+      pwstrength = PwGenerator.PasswordStrengthChecker(originalpw);
     }
     else
     {
@@ -133,40 +148,40 @@ public partial class FrmMain : Form
       switch (pwstrength)
       {
         case var @case when @case == PasswordStrength.Unacceptable:
-        {
-          withBlock.BackColor = Color.Red;
-          this.PlOutput.BackColor = Color.Red;
-          break;
-        }
+          {
+            withBlock.BackColor = Color.Red;
+            this.PlOutput.BackColor = Color.Red;
+            break;
+          }
 
         case var @case when @case == PasswordStrength.Weak:
-        {
-          withBlock.BackColor = Color.PeachPuff;
-          this.PlOutput.BackColor = Color.PeachPuff;
-          break;
-        }
+          {
+            withBlock.BackColor = Color.PeachPuff;
+            this.PlOutput.BackColor = Color.PeachPuff;
+            break;
+          }
 
         case var @case when @case == PasswordStrength.Ok:
-        {
-          withBlock.BackColor = Color.Yellow;
-          this.PlOutput.BackColor = Color.Yellow;
-          break;
-        }
+          {
+            withBlock.BackColor = Color.Yellow;
+            this.PlOutput.BackColor = Color.Yellow;
+            break;
+          }
 
         case var @case when @case == PasswordStrength.Strong:
-        {
-          withBlock.BackColor = Color.LightGreen;
-          this.PlOutput.BackColor = Color.LightGreen;
-          break;
-        }
+          {
+            withBlock.BackColor = Color.LightGreen;
+            this.PlOutput.BackColor = Color.LightGreen;
+            break;
+          }
 
         case var @case when @case == PasswordStrength.Secure:
-        {
-          withBlock.BackColor = Color.Green;
-          this.PlOutput.BackColor = Color.Green; 
-          this.LbPasswordStrength.ForeColor = Color.White;
-          break;
-        }
+          {
+            withBlock.BackColor = Color.Green;
+            this.PlOutput.BackColor = Color.Green;
+            this.LbPasswordStrength.ForeColor = Color.White;
+            break;
+          }
       }
     }
   }
@@ -305,9 +320,9 @@ public partial class FrmMain : Form
         else cb.CheckedChanged += this.CheckboxVariant_CheckedChanged;
       }
       else if (cbtag == 0) { }
-      else if (cbtag == 1) 
-        cb.CheckedChanged -= this.CheckboxEncoding_CheckedChanged; 
-      else cb.CheckedChanged -= this.CheckboxVariant_CheckedChanged; 
+      else if (cbtag == 1)
+        cb.CheckedChanged -= this.CheckboxEncoding_CheckedChanged;
+      else cb.CheckedChanged -= this.CheckboxVariant_CheckedChanged;
     }
 #pragma warning restore CS8622 // Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem Zieldelegaten.
 
@@ -337,5 +352,5 @@ public partial class FrmMain : Form
       _ => Array.Empty<CheckBox>(),
     };
   }
-   
+
 }

@@ -1,5 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
+
 Imports exc.jdbi.Converts
 Imports exc.jdbi.PasswordCheckers
 Imports exc.jdbi.PasswordGenerators
@@ -9,9 +10,19 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
 
   Public Class FrmMain
     Private ReadOnly DefForeColor As Color = SystemColors.ControlText
+
+    Private Sub CbNumerics_CheckedChanged(sender As Object, e As EventArgs) _
+      Handles CbUppers.CheckedChanged, CbSpecialCharacters.CheckedChanged,
+      CbNumerics.CheckedChanged, CbLowers.CheckedChanged, CbInternationalSymbols.CheckedChanged
+      Dim cb = DirectCast(sender, CheckBox)
+      If cb Is Nothing Then Return
+      Me.SetBasicMask()
+    End Sub
+
     Private Sub CheckboxEncoding_CheckedChanged(sender As Object, e As EventArgs) _
     Handles CbHex.CheckedChanged, CbB32.CheckedChanged, CbB62.CheckedChanged,
     CbB64.CheckedChanged, CbB64Url.CheckedChanged, CbNone.CheckedChanged
+      Me.SetBasicMask()
       Select Case True
         Case sender Is Me.CbNone : Me.CheckBoxHandling(sender)
         Case sender Is Me.CbHex : Me.CheckBoxHandling(sender)
@@ -24,6 +35,7 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
 
     Private Sub CheckboxVariant_CheckedChanged(sender As Object, e As EventArgs) _
     Handles CbLetters.CheckedChanged, CbBytes.CheckedChanged
+      Me.SetBasicMask()
       Select Case True
         Case sender Is Me.CbLetters
           Me.CheckBoxHandling(sender)
@@ -36,13 +48,13 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
 
     Private Sub PitureBox_Click(sender As Object, e As EventArgs) Handles PbClear.Click, PbCopy.Click
       Select Case True
-        Case sender Is Me.PbClear : Me.TbOutput.Clear()
+        Case sender Is Me.PbClear : Me.TbOutput.Clear() : Me.SetBasicMask()
         Case sender Is Me.PbCopy : Clipboard.SetText(Me.TbOutput.Text)
       End Select
     End Sub
 
     Private Sub BtGenerate_Click(sender As Object, e As EventArgs) Handles BtPasswordGenerate.Click
-      Me.TbOutput.Clear()
+      Me.SetBasicMask()
       If Me.CheckAllParameter() Then
         Me.GeneratePassword()
         Me.CalcPasswordStrength()
@@ -50,11 +62,14 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
     End Sub
 
     Private Sub SetEnableComboBox(_enable As Boolean)
-      'Dim addopt = Me.ToCheckBoxGroup(0)
-      'For Each g In addopt
-      '  g.Enabled = _enable
-      'Next
       Me.GbAdditionalOptions.Enabled = _enable
+    End Sub
+
+    Private Sub SetBasicMask()
+      Me.TbOutput.Clear()
+      Me.PlOutput.BackColor = Color.Transparent
+      Me.LbPasswordStrength.Text = "[PasswordStrength]"
+      Me.LbPasswordStrength.BackColor = Color.Transparent
     End Sub
 
     Private Sub CalcPasswordStrength()
@@ -89,7 +104,6 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
             .BackColor = Color.Green
             .ForeColor = Color.White
             Me.PlOutput.BackColor = Color.Green
-
         End Select
       End With
     End Sub
@@ -134,7 +148,6 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
             Exit For
           End If
         Next
-
       End With
       Return pwinfo
     End Function
@@ -185,9 +198,8 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       Dim cbox = DirectCast(sender, CheckBox)
       cbox.Checked = True
       Me.ReSetHandleCheckbox(cb, True)
-
-
     End Sub
+
     Private Sub ReSetHandleCheckbox(cbox() As CheckBox, _set As Boolean)
       If cbox Is Nothing Then Return
       For Each cb In cbox
@@ -208,6 +220,7 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
         End If
       Next
     End Sub
+
     Private Shared Sub ResetCheckedCheckbox(cbox() As CheckBox, _set As Boolean)
       If cbox Is Nothing Then Return
       For Each cb In cbox
@@ -219,6 +232,7 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       Dim cbnumber = CType(DirectCast(sender, CheckBox).Tag, Int32)
       Return Me.ToCheckBoxGroup(cbnumber)
     End Function
+
     Private Function ToCheckBoxGroup(checkboxtagnumber As Int32) As CheckBox()
       Select Case checkboxtagnumber
         Case 0 : Return New CheckBox() {Me.CbNumerics, Me.CbLowers, Me.CbUppers, Me.CbSpecialCharacters, Me.CbInternationalSymbols}
@@ -227,9 +241,11 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       End Select
       Return Nothing
     End Function
+
     Public Sub New()
       Me.InitializeComponent()
     End Sub
+
   End Class
 
 End Namespace

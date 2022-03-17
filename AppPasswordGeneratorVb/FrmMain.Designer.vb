@@ -296,10 +296,9 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       'CbB64Url
       '
       Me.CbB64Url.Anchor = System.Windows.Forms.AnchorStyles.Right
-      Me.CbB64Url.Location = New System.Drawing.Point(743, 40)
-      Me.CbB64Url.Margin = New System.Windows.Forms.Padding(10, 3, 3, 3)
+      Me.CbB64Url.Location = New System.Drawing.Point(741, 40)
       Me.CbB64Url.Name = "CbB64Url"
-      Me.CbB64Url.Size = New System.Drawing.Size(110, 22)
+      Me.CbB64Url.Size = New System.Drawing.Size(112, 22)
       Me.CbB64Url.TabIndex = 13
       Me.CbB64Url.Tag = "1"
       Me.CbB64Url.Text = "Base 64 Url"
@@ -360,10 +359,9 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       'CbB64
       '
       Me.CbB64.Anchor = System.Windows.Forms.AnchorStyles.Right
-      Me.CbB64.Location = New System.Drawing.Point(743, 6)
-      Me.CbB64.Margin = New System.Windows.Forms.Padding(10, 3, 3, 3)
+      Me.CbB64.Location = New System.Drawing.Point(741, 6)
       Me.CbB64.Name = "CbB64"
-      Me.CbB64.Size = New System.Drawing.Size(110, 22)
+      Me.CbB64.Size = New System.Drawing.Size(112, 22)
       Me.CbB64.TabIndex = 12
       Me.CbB64.Tag = "1"
       Me.CbB64.Text = "Base 64"
