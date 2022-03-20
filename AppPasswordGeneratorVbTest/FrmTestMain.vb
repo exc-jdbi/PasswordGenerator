@@ -5,6 +5,10 @@ Imports exc.jdbi.PasswordCheckers
 Imports exc.jdbi.PasswordGenerators
 Imports PwGenerator = exc.jdbi.PasswordGenerators.PasswordGenerator
 
+'Is an old project that I used for the implementation of @ PasswordGenerator 2022.
+'It is still worked with the CheckedChanged-Event, which made the implementation
+'more difficult. 
+
 Namespace exc.jdbi.GeneratorPassword.App.TestVb
   Public Class FrmTestMain
     Private ReadOnly DefForeColor As Color = SystemColors.ControlText
