@@ -11,17 +11,17 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
   Public Class FrmMain
     Private ReadOnly DefForeColor As Color = SystemColors.ControlText
 
-    Private Sub CbNumerics_CheckedChanged(sender As Object, e As EventArgs) _
-      Handles CbUppers.CheckedChanged, CbSpecialCharacters.CheckedChanged,
-      CbNumerics.CheckedChanged, CbLowers.CheckedChanged, CbInternationalSymbols.CheckedChanged
+    Private Sub CbAdditional_Click(sender As Object, e As EventArgs) _
+      Handles CbUppers.Click, CbSpecialCharacters.Click,
+      CbNumerics.Click, CbLowers.Click, CbInternationalSymbols.Click
       Dim cb = DirectCast(sender, CheckBox)
       If cb Is Nothing Then Return
       Me.SetBasicMask()
     End Sub
 
-    Private Sub CheckboxEncoding_CheckedChanged(sender As Object, e As EventArgs) _
-    Handles CbHex.CheckedChanged, CbB32.CheckedChanged, CbB62.CheckedChanged,
-    CbB64.CheckedChanged, CbB64Url.CheckedChanged, CbNone.CheckedChanged
+    Private Sub CheckboxEncoding_Click(sender As Object, e As EventArgs) _
+    Handles CbHex.Click, CbB32.Click, CbB62.Click,
+    CbB64.Click, CbB64Url.Click, CbNone.Click
       Me.SetBasicMask()
       Select Case True
         Case sender Is Me.CbNone : Me.CheckBoxHandling(sender)
@@ -33,16 +33,16 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       End Select
     End Sub
 
-    Private Sub CheckboxVariant_CheckedChanged(sender As Object, e As EventArgs) _
-    Handles CbLetters.CheckedChanged, CbBytes.CheckedChanged
+    Private Sub CheckboxVariant_Click(sender As Object, e As EventArgs) _
+    Handles CbLetters.Click, CbBytes.Click
       Me.SetBasicMask()
       Select Case True
         Case sender Is Me.CbLetters
           Me.CheckBoxHandling(sender)
-          Me.SetEnableComboBox(True)
+          Me.GbAdditionalOptions.Enabled = True
         Case sender Is Me.CbBytes
           Me.CheckBoxHandling(sender)
-          Me.SetEnableComboBox(False)
+          Me.GbAdditionalOptions.Enabled = False
       End Select
     End Sub
 
@@ -59,10 +59,6 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
         Me.GeneratePassword()
         Me.CalcPasswordStrength()
       End If
-    End Sub
-
-    Private Sub SetEnableComboBox(_enable As Boolean)
-      Me.GbAdditionalOptions.Enabled = _enable
     End Sub
 
     Private Sub SetBasicMask()
@@ -123,7 +119,11 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
           If cbox(i).Checked Then
             ' Default Byte-Variant is 'hex'
             ' If 'none' selected, then set 'hex'.
-            If i = 0 Then i += 1 : cbox(i).Checked = True
+            If i = 0 Then
+              cbox(i).Checked = False
+              i += 1
+              cbox(i).Checked = True
+            End If
             stringconvertinfo = DirectCast(i, StringConvertInfo)
             Me.TbOutput.Text = PwGenerator.EncodePassword(bytes, stringconvertinfo)
             Exit For
@@ -194,7 +194,7 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
 
       Dim cb = Me.ToCheckBoxGroup(sender)
       Me.ReSetHandleCheckbox(cb, False)
-      ResetCheckedCheckbox(cb, False)
+      Array.ForEach(cb, Sub(c) c.Checked = False)
       Dim cbox = DirectCast(sender, CheckBox)
       cbox.Checked = True
       Me.ReSetHandleCheckbox(cb, True)
@@ -204,33 +204,31 @@ Namespace exc.jdbi.PasswordGenerator.App.Vb
       If cbox Is Nothing Then Return
       For Each cb In cbox
         cb.Enabled = _set
-        Dim cbtag = CType(cb.Tag, Int32)
+        Dim cbtag = Convert.ToInt32(cb.Tag)
         If _set Then
-          If cbtag = 0 Then
-          ElseIf cbtag = 1 Then
-            AddHandler cb.CheckedChanged, AddressOf Me.CheckboxEncoding_CheckedChanged
-          Else : AddHandler cb.CheckedChanged, AddressOf Me.CheckboxVariant_CheckedChanged
-          End If
-        Else
-          If cbtag = 0 Then
-          ElseIf cbtag = 1 Then
-            RemoveHandler cb.CheckedChanged, AddressOf Me.CheckboxEncoding_CheckedChanged
-          Else : RemoveHandler cb.CheckedChanged, AddressOf Me.CheckboxVariant_CheckedChanged
-          End If
+          AddHandler cb.Click, Me.ToCbGroupEvent(cbtag)
+        Else : RemoveHandler cb.Click, Me.ToCbGroupEvent(cbtag)
         End If
       Next
     End Sub
 
-    Private Shared Sub ResetCheckedCheckbox(cbox() As CheckBox, _set As Boolean)
-      If cbox Is Nothing Then Return
-      For Each cb In cbox
-        cb.Checked = _set
-      Next
-    End Sub
+    Private Function ToCbGroupEvent(sender As Object) As EventHandler
+      Dim cbtagnumber = Convert.ToInt32(DirectCast(sender, CheckBox).Tag)
+      Return Me.ToCbGroupEvent(cbtagnumber)
+    End Function
+
+    Private Function ToCbGroupEvent(cbtagnumber As Int32) As EventHandler
+      Select Case cbtagnumber
+        Case 0 : Return New EventHandler(AddressOf Me.CbAdditional_Click)
+        Case 1 : Return New EventHandler(AddressOf Me.CheckboxEncoding_Click)
+        Case 2 : Return New EventHandler(AddressOf Me.CheckboxVariant_Click)
+      End Select
+      Return Nothing
+    End Function
 
     Private Function ToCheckBoxGroup(sender As Object) As CheckBox()
-      Dim cbnumber = CType(DirectCast(sender, CheckBox).Tag, Int32)
-      Return Me.ToCheckBoxGroup(cbnumber)
+      Dim cbtagnumber = Convert.ToInt32(DirectCast(sender, CheckBox).Tag)
+      Return Me.ToCheckBoxGroup(cbtagnumber)
     End Function
 
     Private Function ToCheckBoxGroup(checkboxtagnumber As Int32) As CheckBox()
