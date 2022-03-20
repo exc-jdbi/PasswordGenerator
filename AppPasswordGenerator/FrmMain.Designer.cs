@@ -42,12 +42,12 @@ partial class FrmMain
       this.CbUppers = new System.Windows.Forms.CheckBox();
       this.GbEncoding = new System.Windows.Forms.GroupBox();
       this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-      this.CbB64Url = new System.Windows.Forms.CheckBox();
+      this.CbBase64Url = new System.Windows.Forms.CheckBox();
       this.CbNone = new System.Windows.Forms.CheckBox();
       this.CbHex = new System.Windows.Forms.CheckBox();
-      this.CbB32 = new System.Windows.Forms.CheckBox();
-      this.CbB62 = new System.Windows.Forms.CheckBox();
-      this.CbB64 = new System.Windows.Forms.CheckBox();
+      this.CbBase32 = new System.Windows.Forms.CheckBox();
+      this.CbBase62 = new System.Windows.Forms.CheckBox();
+      this.CbBase64 = new System.Windows.Forms.CheckBox();
       this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.GbPasswordVariants = new System.Windows.Forms.GroupBox();
       this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -211,7 +211,7 @@ partial class FrmMain
       this.CbInternationalSymbols.Tag = "0";
       this.CbInternationalSymbols.Text = "International Symbols (中国 ...)";
       this.CbInternationalSymbols.UseVisualStyleBackColor = true;
-      this.CbInternationalSymbols.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
+      this.CbInternationalSymbols.Click += new System.EventHandler(this.CheckboxAdditionalOption_Click);
       // 
       // CbNumerics
       // 
@@ -227,7 +227,7 @@ partial class FrmMain
       this.CbNumerics.Tag = "0";
       this.CbNumerics.Text = "Numbers (123 ...)";
       this.CbNumerics.UseVisualStyleBackColor = true;
-      this.CbNumerics.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
+      this.CbNumerics.Click += new System.EventHandler(this.CheckboxAdditionalOption_Click);
       // 
       // CbSpecialCharacters
       // 
@@ -240,7 +240,7 @@ partial class FrmMain
       this.CbSpecialCharacters.Tag = "0";
       this.CbSpecialCharacters.Text = "Special Characters (@#$% ...)";
       this.CbSpecialCharacters.UseVisualStyleBackColor = true;
-      this.CbSpecialCharacters.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
+      this.CbSpecialCharacters.Click += new System.EventHandler(this.CheckboxAdditionalOption_Click);
       // 
       // CbLowers
       // 
@@ -256,7 +256,7 @@ partial class FrmMain
       this.CbLowers.Tag = "0";
       this.CbLowers.Text = "Lowercase Characters (abc ...)";
       this.CbLowers.UseVisualStyleBackColor = true;
-      this.CbLowers.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
+      this.CbLowers.Click += new System.EventHandler(this.CheckboxAdditionalOption_Click);
       // 
       // CbUppers
       // 
@@ -271,7 +271,7 @@ partial class FrmMain
       this.CbUppers.Tag = "0";
       this.CbUppers.Text = "Uppercase Characters (ABC ...)";
       this.CbUppers.UseVisualStyleBackColor = true;
-      this.CbUppers.CheckedChanged += new System.EventHandler(this.CheckboxAdditionalOption_CheckedChanged);
+      this.CbUppers.Click += new System.EventHandler(this.CheckboxAdditionalOption_Click);
       // 
       // GbEncoding
       // 
@@ -291,12 +291,12 @@ partial class FrmMain
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 270F));
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 270F));
-      this.tableLayoutPanel2.Controls.Add(this.CbB64Url, 2, 1);
+      this.tableLayoutPanel2.Controls.Add(this.CbBase64Url, 2, 1);
       this.tableLayoutPanel2.Controls.Add(this.CbNone, 0, 0);
       this.tableLayoutPanel2.Controls.Add(this.CbHex, 0, 1);
-      this.tableLayoutPanel2.Controls.Add(this.CbB32, 1, 0);
-      this.tableLayoutPanel2.Controls.Add(this.CbB62, 1, 1);
-      this.tableLayoutPanel2.Controls.Add(this.CbB64, 2, 0);
+      this.tableLayoutPanel2.Controls.Add(this.CbBase32, 1, 0);
+      this.tableLayoutPanel2.Controls.Add(this.CbBase62, 1, 1);
+      this.tableLayoutPanel2.Controls.Add(this.CbBase64, 2, 0);
       this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 22);
       this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -306,18 +306,18 @@ partial class FrmMain
       this.tableLayoutPanel2.Size = new System.Drawing.Size(856, 69);
       this.tableLayoutPanel2.TabIndex = 0;
       // 
-      // CbB64Url
+      // CbBase64Url
       // 
-      this.CbB64Url.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.CbB64Url.Location = new System.Drawing.Point(741, 40);
-      this.CbB64Url.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-      this.CbB64Url.Name = "CbB64Url";
-      this.CbB64Url.Size = new System.Drawing.Size(112, 22);
-      this.CbB64Url.TabIndex = 13;
-      this.CbB64Url.Tag = "1";
-      this.CbB64Url.Text = "Base 64 Url";
-      this.CbB64Url.UseVisualStyleBackColor = true;
-      this.CbB64Url.CheckedChanged += new System.EventHandler(this.CheckboxVariant_CheckedChanged);
+      this.CbBase64Url.Anchor = System.Windows.Forms.AnchorStyles.Right;
+      this.CbBase64Url.Location = new System.Drawing.Point(741, 40);
+      this.CbBase64Url.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+      this.CbBase64Url.Name = "CbBase64Url";
+      this.CbBase64Url.Size = new System.Drawing.Size(112, 22);
+      this.CbBase64Url.TabIndex = 13;
+      this.CbBase64Url.Tag = "1";
+      this.CbBase64Url.Text = "Base 64 Url";
+      this.CbBase64Url.UseVisualStyleBackColor = true;
+      this.CbBase64Url.Click += new System.EventHandler(this.CheckboxEncoding_Click);
       // 
       // CbNone
       // 
@@ -331,7 +331,7 @@ partial class FrmMain
       this.CbNone.Tag = "1";
       this.CbNone.Text = "None";
       this.CbNone.UseVisualStyleBackColor = true;
-      this.CbNone.CheckedChanged += new System.EventHandler(this.CheckboxEncoding_CheckedChanged);
+      this.CbNone.Click += new System.EventHandler(this.CheckboxEncoding_Click);
       // 
       // CbHex
       // 
@@ -347,46 +347,46 @@ partial class FrmMain
       this.CbHex.Tag = "1";
       this.CbHex.Text = "Hex";
       this.CbHex.UseVisualStyleBackColor = true;
-      this.CbHex.CheckedChanged += new System.EventHandler(this.CheckboxEncoding_CheckedChanged);
+      this.CbHex.Click += new System.EventHandler(this.CheckboxEncoding_Click);
       // 
-      // CbB32
+      // CbBase32
       // 
-      this.CbB32.Anchor = System.Windows.Forms.AnchorStyles.None;
-      this.CbB32.Location = new System.Drawing.Point(376, 6);
-      this.CbB32.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-      this.CbB32.Name = "CbB32";
-      this.CbB32.Size = new System.Drawing.Size(110, 22);
-      this.CbB32.TabIndex = 10;
-      this.CbB32.Tag = "1";
-      this.CbB32.Text = "Base 32";
-      this.CbB32.UseVisualStyleBackColor = true;
-      this.CbB32.CheckedChanged += new System.EventHandler(this.CheckboxEncoding_CheckedChanged);
+      this.CbBase32.Anchor = System.Windows.Forms.AnchorStyles.None;
+      this.CbBase32.Location = new System.Drawing.Point(376, 6);
+      this.CbBase32.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+      this.CbBase32.Name = "CbBase32";
+      this.CbBase32.Size = new System.Drawing.Size(110, 22);
+      this.CbBase32.TabIndex = 10;
+      this.CbBase32.Tag = "1";
+      this.CbBase32.Text = "Base 32";
+      this.CbBase32.UseVisualStyleBackColor = true;
+      this.CbBase32.Click += new System.EventHandler(this.CheckboxEncoding_Click);
       // 
-      // CbB62
+      // CbBase62
       // 
-      this.CbB62.Anchor = System.Windows.Forms.AnchorStyles.None;
-      this.CbB62.Location = new System.Drawing.Point(376, 40);
-      this.CbB62.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-      this.CbB62.Name = "CbB62";
-      this.CbB62.Size = new System.Drawing.Size(110, 22);
-      this.CbB62.TabIndex = 11;
-      this.CbB62.Tag = "1";
-      this.CbB62.Text = "Base 62";
-      this.CbB62.UseVisualStyleBackColor = true;
-      this.CbB62.CheckedChanged += new System.EventHandler(this.CheckboxEncoding_CheckedChanged);
+      this.CbBase62.Anchor = System.Windows.Forms.AnchorStyles.None;
+      this.CbBase62.Location = new System.Drawing.Point(376, 40);
+      this.CbBase62.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+      this.CbBase62.Name = "CbBase62";
+      this.CbBase62.Size = new System.Drawing.Size(110, 22);
+      this.CbBase62.TabIndex = 11;
+      this.CbBase62.Tag = "1";
+      this.CbBase62.Text = "Base 62";
+      this.CbBase62.UseVisualStyleBackColor = true;
+      this.CbBase62.Click += new System.EventHandler(this.CheckboxEncoding_Click);
       // 
-      // CbB64
+      // CbBase64
       // 
-      this.CbB64.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.CbB64.Location = new System.Drawing.Point(741, 6);
-      this.CbB64.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-      this.CbB64.Name = "CbB64";
-      this.CbB64.Size = new System.Drawing.Size(112, 22);
-      this.CbB64.TabIndex = 12;
-      this.CbB64.Tag = "1";
-      this.CbB64.Text = "Base 64";
-      this.CbB64.UseVisualStyleBackColor = true;
-      this.CbB64.CheckedChanged += new System.EventHandler(this.CheckboxEncoding_CheckedChanged);
+      this.CbBase64.Anchor = System.Windows.Forms.AnchorStyles.Right;
+      this.CbBase64.Location = new System.Drawing.Point(741, 6);
+      this.CbBase64.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+      this.CbBase64.Name = "CbBase64";
+      this.CbBase64.Size = new System.Drawing.Size(112, 22);
+      this.CbBase64.TabIndex = 12;
+      this.CbBase64.Tag = "1";
+      this.CbBase64.Text = "Base 64";
+      this.CbBase64.UseVisualStyleBackColor = true;
+      this.CbBase64.Click += new System.EventHandler(this.CheckboxEncoding_Click);
       // 
       // tableLayoutPanel3
       // 
@@ -442,7 +442,7 @@ partial class FrmMain
       this.CbBytes.Tag = "2";
       this.CbBytes.Text = "Bytes (0 - 255)";
       this.CbBytes.UseVisualStyleBackColor = true;
-      this.CbBytes.CheckedChanged += new System.EventHandler(this.CheckboxVariant_CheckedChanged);
+      this.CbBytes.Click += new System.EventHandler(this.CheckboxVariant_Click);
       // 
       // CbLetters
       // 
@@ -458,7 +458,7 @@ partial class FrmMain
       this.CbLetters.Tag = "2";
       this.CbLetters.Text = "Letters (AaBb ...)";
       this.CbLetters.UseVisualStyleBackColor = true;
-      this.CbLetters.CheckedChanged += new System.EventHandler(this.CheckboxVariant_CheckedChanged);
+      this.CbLetters.Click += new System.EventHandler(this.CheckboxVariant_Click);
       // 
       // GbGeneratePassword
       // 
@@ -641,10 +641,10 @@ partial class FrmMain
   private TableLayoutPanel tableLayoutPanel2;
   private CheckBox CbNone;
   private CheckBox CbHex;
-  private CheckBox CbB32;
-  private CheckBox CbB62;
-  private CheckBox CbB64;
-  private CheckBox CbB64Url;
+  private CheckBox CbBase32;
+  private CheckBox CbBase62;
+  private CheckBox CbBase64;
+  private CheckBox CbBase64Url;
   private TableLayoutPanel tableLayoutPanel3;
   private TableLayoutPanel tableLayoutPanel4;
   private CheckBox CbLetters;
